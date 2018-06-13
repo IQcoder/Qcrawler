@@ -1,0 +1,29 @@
+{
+  "name": "Qcrawler/Qcrawler",
+  "description": "A PHP web crawler (scraper/spider) 快速、简洁且强大的爬虫/采集框架",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "钦",
+      "email": "stchencq@gmail.com"
+    }
+  ],
+  "require": {
+    "predis/predis": "*",
+    "monolog/monolog": "*",
+    "guzzlehttp/guzzle": "*",
+    "symfony/dom-crawler": "*",
+    "symfony/css-selector": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Qcrawler\\": "core/"
+    }
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}

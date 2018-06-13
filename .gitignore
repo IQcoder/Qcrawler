@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/Qcrawler.iml
+.idea/inspectionProfiles/
+.idea/modules.xml
+.idea/workspace.xml
+composer.lock
+vendor/
