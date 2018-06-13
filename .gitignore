@@ -3,5 +3,6 @@
 .idea/inspectionProfiles/
 .idea/modules.xml
 .idea/workspace.xml
+.idea/dictionaries
 composer.lock
 vendor/
