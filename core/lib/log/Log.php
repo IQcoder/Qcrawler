@@ -7,7 +7,9 @@
  * Description:
  */
 
-class Log extends Base
+abstract class Log
 {
-
+    abstract public function add(string $log,string $file);
+    abstract public function delete(string $log,string $file);
+    abstract public function update(string $log,string $file);
 }
