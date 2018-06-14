@@ -12,7 +12,8 @@ class Monolog extends Log
 {
     public function add(string $log, string $file)
     {
-        // TODO: Implement add() method.
+        $log = new Logger('name');
+
     }
 
     public function update(string $log, string $file)

@@ -24,8 +24,8 @@ class LogServices
         return self::$object;
     }
 
-    public function add()
+    public function add(string $log,string $pah)
     {
-
+        return $this->log->add($log,$pah);
     }
 }
