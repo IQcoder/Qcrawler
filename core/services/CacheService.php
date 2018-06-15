@@ -2,18 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: chenchangqin
- * Date: 18/6/13
- * Time: 下午5:49
+ * Date: 18/6/15
+ * Time: 下午1:56
  * Description:
  */
 
-class LogServices
+class CacheService
 {
     private static $object;
-    private $log;
 
     private function __construct(){
-        $this->log = new Monolog('services');
+        $config = require CONFIG.'/redis.php';
+        return new Redis($config);
     }
 
     public static function getInstance()
@@ -24,8 +24,4 @@ class LogServices
         return self::$object;
     }
 
-    public function add(string $log,string $pah)
-    {
-        return $this->log->add($log,$pah);
-    }
 }

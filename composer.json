@@ -18,7 +18,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Qcrawler\\": "core/"
+      "Qcrawler\\": "core/",
+      "App\\": "app/",
+      "Cli\\": "cli/"
     }
   },
   "repositories": {

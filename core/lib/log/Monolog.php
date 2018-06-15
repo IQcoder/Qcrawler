@@ -10,20 +10,16 @@
 use Monolog\Logger;
 class Monolog extends Log
 {
-    public function add(string $log, string $file)
-    {
-        $log = new Logger('name');
 
+    public function __construct($name)
+    {
+        $this->log = new Logger($name);
     }
 
-    public function update(string $log, string $file)
+    public function add(array $arguments)
     {
-        // TODO: Implement update() method.
+        return $this->log->addError($arguments['message']);
     }
 
-    public function delete(string $log, string $file)
-    {
-        // TODO: Implement delete() method.
-    }
 
 }

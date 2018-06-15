@@ -9,7 +9,6 @@
 
 abstract class Log
 {
-    abstract public function add(string $log,string $file);
-    abstract public function delete(string $log,string $file);
-    abstract public function update(string $log,string $file);
+    protected $log;
+    abstract public function add(array $arguments);
 }
