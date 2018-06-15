@@ -6,5 +6,10 @@
  * Time: 下午5:10
  * Description: 引导文件
  */
-require __DIR__ . '/vendor/autoload.php';
+define('ROOT',__DIR__);
+define('CORE',ROOT.'/core');
+define('APP',ROOT.'/app');
+define('CONFIG',ROOT.'/config');
+
+require ROOT . '/vendor/autoload.php';
 //注入配置文件
