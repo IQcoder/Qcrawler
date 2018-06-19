@@ -6,8 +6,14 @@
  * Time: 下午3:25
  * Description:
  */
+namespace App\controllers;
 
 class IndexController
 {
 
+    public function index()
+    {
+        
+    }
+    
 }

@@ -6,8 +6,9 @@
  * Time: 下午5:21
  * Description: 缓存的存储抽象类
  */
+namespace Qcrawler\lib\storage;
 
-abstract class Storage extends Base
+abstract class Storage
 {
     protected $storage;
 

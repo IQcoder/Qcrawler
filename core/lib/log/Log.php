@@ -7,8 +7,9 @@
  * Description:
  */
 
+namespace Qcrawler\lib\log;
 abstract class Log
 {
     protected $log;
-    abstract public function add(array $arguments);
+    abstract public function add(string $message);
 }

@@ -6,7 +6,7 @@
  * Time: 下午12:26
  * Description: Redis存储方法
  */
-
+namespace Qcrawler\lib\storage;
 class Redis extends Storage
 {
 

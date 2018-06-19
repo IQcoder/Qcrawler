@@ -6,7 +6,7 @@
  * Time: 下午5:45
  * Description:
  */
-
+namespace Qcrawler\lib\log;
 use Monolog\Logger;
 class Monolog extends Log
 {
@@ -16,9 +16,9 @@ class Monolog extends Log
         $this->log = new Logger($name);
     }
 
-    public function add(array $arguments)
+    public function add(string $message)
     {
-        return $this->log->addError($arguments['message']);
+        return $this->log->addError($message);
     }
 
 
