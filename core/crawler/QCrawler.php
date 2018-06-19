@@ -7,6 +7,8 @@
  * Description: 爬虫类
  */
 namespace Qcrawler\crawler;
+use Symfony\Component\DomCrawler\Crawler;
+
 class QCrawler implements QCrawlerInterface
 {
     /**
@@ -57,9 +59,44 @@ class QCrawler implements QCrawlerInterface
      */
     public $retry_count = 1;
 
+    /**
+     * @var string
+     * 设置css选择器
+     */
+    public $selector;
+
+    public function init()
+    {
+        $crawler = new Crawler();
+
+    }
+
     public function run()
     {
-        // TODO: Implement run() method.
+        $result = iconv('GBK', 'UTF-8', $result);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($result);
+
+        $list = [];
+        // 通过css选择器遍历影片列表
+        $tr_selector = '#header > div > div.bd2 > div.bd3 > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div.co_content8 tr';
+        $crawler->filter($tr_selector)->each(function (Crawler $node, $i) use (&$list) {
+            $name = dom_filter($node, 'a:nth-child(2)', 'html');
+            if (empty($name)) {
+                return;
+            }
+            $url = 'http://www.dytt8.net'.dom_filter($node, 'a:nth-child(2)', 'attr', 'href');
+
+            $data = [
+                'name' => $name,
+                'url' => $url,
+                'time' => dom_filter($node, '.inddline font', 'html'),
+            ];
+            // 把影片url、name推送到redis队列，以便进一步爬取影片下载链接
+            redis()->lpush('dytt8:detail_queue', json_encode($data));
+            $list[] = $data;
+        });
+        var_dump($list);
     }
 
     public function validate()
@@ -67,6 +104,16 @@ class QCrawler implements QCrawlerInterface
         if (!$this->base_uri) {
             throw new \Exception('base_uri not found');
         }
+    }
+
+    public function error()
+    {
+        // TODO: Implement error() method.
+    }
+
+    public function success()
+    {
+        // TODO: Implement success() method.
     }
 
     public function __set($name, $value)

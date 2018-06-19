@@ -11,6 +11,7 @@ require __DIR__.'/../bootstrap.php';
 
 $crawler = new QCrawler();
 $crawler->base_uri = 'http://www.dytt8.net/';
+
 if ($crawler->validate()) {
     $crawler->run();
 }
