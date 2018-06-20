@@ -30,7 +30,7 @@ class Redis extends Storage
         if ($this->storage->exists($key)) {
             return $this->storage->set($key,$data);
         }
-        throw new Exception('key not found');
+        throw new \Exception('key not found');
     }
 
     public function delete(string $key)

@@ -8,6 +8,6 @@
  */
 $components = [];
 foreach (glob(__DIR__.'/components/*.php') as $filename) {
-    $components = array_merge($components, [basename($filename) => require($filename)]);
+    $components = array_merge($components, [substr(basename($filename),0,-4) => require($filename)]);
 }
 return $components;

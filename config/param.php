@@ -6,8 +6,10 @@
  * Time: 下午7:10
  * Description:
  */
-$params = [];
+$params = [
+    'controllers' => 'App\controllers\\'
+];
 foreach (glob(__DIR__.'/params/*.php') as $filename) {
-    $params = array_merge($params, [basename($filename) => require($filename)]);
+    $params = array_merge($params, [substr(basename($filename),0,-4) => require($filename)]);
 }
 return $params;

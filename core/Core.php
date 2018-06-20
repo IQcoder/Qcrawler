@@ -1,76 +1,63 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chenchangqin
- * Date: 18/6/19
- * Time: 下午1:34
- * Description: 调度器
- */
+
 namespace Qcrawler;
+
+/**
+ * Class Core
+ * @package Qcrawler 核心类
+ * @method static Core component(string $name)
+ * @method static Core param(string $name)
+ */
 
 class Core
 {
 
-    public static function Redis()
+    public static $redis;
+    public static $route;
+    public static $log;
+
+    public static function redis()
     {
-        return new \Qcrawler\lib\storage\Redis(self::component('redis'));
+        if (self::$redis) {
+            self::$redis = new \Qcrawler\lib\storage\Redis(self::component('redis'));
+        }
+        return self::$redis;
     }
 
-    public static function Log()
+    public static function log()
     {
-        return new \Qcrawler\lib\log\Monolog(self::component('log.name'));
+        if (!self::$log) {
+            self::$log = new \Qcrawler\lib\log\Monolog(self::component('log.name'));
+        }
+        return self::$log;
     }
 
-    /**
-     * @function component
-     * @param string $name
-     * @author chenchangqin
-     * @description 获取一些配置数组的数据
-     */
-    public static function component($name = null)
+    public static function route()
     {
-        $component = require CONFIG.'/component.php';
+        if (!self::$route) {
+            self::$route = new \Qcrawler\lib\route\Route();
+        }
+        return self::$route;
+    }
 
-        if (!$name) {
-            return $component;
+    public static function __callStatic($name, $arguments)
+    {
+        $return = require CONFIG.'/'.$name.'.php';
+
+        if (!$arguments[0]) {
+            return $return;
         }
 
-        if (strpos('.',$name)) {
-            list($arr,$key) = explode('.',$name);
-            if ($component[$arr][$key]) {
-                $component = $component[$arr][$key];
+        if (strpos('.',$arguments[0])) {
+            list($arr,$key) = explode('.',$arguments[0]);
+            if ($return[$arr][$key]) {
+                $return = $return[$arr][$key];
             }
         } else {
-            $component = $component[$name];
+            $return = $return[$arguments[0]];
         }
 
-        return $component;
+        return $return;
     }
 
-    /**
-     * @function param
-     * @param string $name
-     * @author chenchangqin
-     * @description 获取参数数据
-     */
-    public static function param($name = null)
-    {
-        $param = require CONFIG.'/param.php';
-
-        if (!$name) {
-            return $param;
-        }
-
-        if (strpos('.',$name)) {
-            list($arr,$key) = explode('.',$name);
-            if ($param[$arr][$key]) {
-                $param = $param[$arr][$key];
-            }
-        } else {
-            $param = $param[$name];
-        }
-
-        return $param;
-    }
-    
 }

@@ -7,6 +7,7 @@
  * Description: 爬虫类
  */
 namespace Qcrawler\crawler;
+use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
 class QCrawler implements QCrawlerInterface
@@ -65,14 +66,29 @@ class QCrawler implements QCrawlerInterface
      */
     public $selector;
 
+    private $crawler;
+
     public function init()
     {
-        $crawler = new Crawler();
 
+
+        $client = new Client(['timeout' => $this->timeout]);
+        $data = $client->requestAsync('get', $this->base_uri);
+        var_dump($data);die;
+//        $this->crawler = new Crawler();
+
+
+        return $this;
     }
 
     public function run()
     {
+        $this->crawler = new Crawler();
+        $this->crawler->addHtmlContent();
+
+
+
+
         $result = iconv('GBK', 'UTF-8', $result);
         $crawler = new Crawler();
         $crawler->addHtmlContent($result);
@@ -104,6 +120,7 @@ class QCrawler implements QCrawlerInterface
         if (!$this->base_uri) {
             throw new \Exception('base_uri not found');
         }
+        return true;
     }
 
     public function error()

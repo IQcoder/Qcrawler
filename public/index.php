@@ -9,3 +9,4 @@
 define('Q_ROOT',__DIR__);
 
 require Q_ROOT.'/../bootstrap.php';
+require Q_ROOT.'/../config/route.php';

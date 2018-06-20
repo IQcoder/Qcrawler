@@ -13,8 +13,7 @@
     "monolog/monolog": "*",
     "guzzlehttp/guzzle": "*",
     "symfony/dom-crawler": "*",
-    "symfony/css-selector": "*",
-    "noahbuscher/macaw": "dev-master"
+    "symfony/css-selector": "*"
   },
   "autoload": {
     "psr-4": {

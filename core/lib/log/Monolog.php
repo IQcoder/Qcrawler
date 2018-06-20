@@ -16,10 +16,9 @@ class Monolog extends Log
         $this->log = new Logger($name);
     }
 
-    public function add(string $message)
+    public function info(string $message)
     {
-        return $this->log->addError($message);
+        return $this->log->info($message);
     }
-
 
 }

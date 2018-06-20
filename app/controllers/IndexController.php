@@ -13,7 +13,11 @@ class IndexController
 
     public function index()
     {
-        
+        $crawler = new \Qcrawler\crawler\QCrawler();
+        $crawler->base_uri = 'http://www.dytt8.net/';
+        if ($crawler->validate()) {
+            $crawler->init()->run();
+        }
     }
     
 }

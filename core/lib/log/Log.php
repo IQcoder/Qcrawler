@@ -11,5 +11,5 @@ namespace Qcrawler\lib\log;
 abstract class Log
 {
     protected $log;
-    abstract public function add(string $message);
+    abstract public function info(string $message);
 }
