@@ -15,10 +15,11 @@ class Core
     public static $redis;
     public static $route;
     public static $log;
+    public static $validation;
 
     public static function redis()
     {
-        if (self::$redis) {
+        if (!self::$redis) {
             self::$redis = new \Qcrawler\lib\storage\Redis(self::component('redis'));
         }
         return self::$redis;
@@ -40,21 +41,32 @@ class Core
         return self::$route;
     }
 
-    public static function __callStatic($name, $arguments)
+    public static function validation(object $object)
     {
-        $return = require CONFIG.'/'.$name.'.php';
+        if (!self::$validation) {
+            self::$validation = new \Qcrawler\lib\validate\Validate($object);
+        }
+        return self::$validation;
+    }
 
-        if (!$arguments[0]) {
+
+
+    public static function __callStatic($method, $arguments)
+    {
+        $return = require CONFIG.'/'.$method.'.php';
+        list($name) = $arguments;
+
+        if (!$name) {
             return $return;
         }
 
-        if (strpos('.',$arguments[0])) {
-            list($arr,$key) = explode('.',$arguments[0]);
+        if (strpos('.',$name)) {
+            list($arr,$key) = explode('.',$name);
             if ($return[$arr][$key]) {
                 $return = $return[$arr][$key];
             }
         } else {
-            $return = $return[$arguments[0]];
+            $return = $return[$name];
         }
 
         return $return;

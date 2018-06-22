@@ -8,6 +8,13 @@
  */
 //use NoahBuscher\Macaw\Macaw;
 use Qcrawler\Core;
+
+$whoops = new \Whoops\Run;
+
+$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+
+$whoops->register();
+
 $routes = [
     '/' => 'IndexController@index'
 ];

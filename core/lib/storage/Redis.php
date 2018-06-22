@@ -1,12 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chenchangqin
- * Date: 18/6/15
- * Time: 下午12:26
- * Description: Redis存储方法
- */
 namespace Qcrawler\lib\storage;
+
+/**
+ * Class Redis Redis存储方法
+ * @package Qcrawler\lib\storage
+ * @method array hgetall($key)
+ */
 class Redis extends Storage
 {
 
@@ -46,5 +45,15 @@ class Redis extends Storage
     public function decrease(string $key, int $num=1)
     {
         return $this->storage->decrby($key,$num);
+    }
+
+    public function __call($method, $arguments)
+    {
+        try{
+            $return = $this->storage->$method(implode(',', $arguments));
+        }catch(\Exception $e) {
+            return $e->getMessage();
+        }
+        return $return;
     }
 }

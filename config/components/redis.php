@@ -7,6 +7,8 @@
  * Description: 配置redis
  */
 return [
-    'host' => '127.0.0.1',
-    'port' => 6379
+    'scheme'        => 'tcp',
+    'host'          => '127.0.0.1',
+    'port'          => 6379,
+    'read_write_timeout' => 0,
 ];

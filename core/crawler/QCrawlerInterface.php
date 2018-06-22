@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chenchangqin
- * Date: 18/6/19
- * Time: 下午12:19
- * Description: 接口类
- */
+
 namespace Qcrawler\crawler;
 
+/**
+ * Interface QCrawlerInterface 接口类
+ * @package Qcrawler\crawler
+ */
 interface QCrawlerInterface
 {
     /**
@@ -49,4 +47,6 @@ interface QCrawlerInterface
      * @description 初始化
      */
     public function init();
+
+
 }

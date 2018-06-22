@@ -1,15 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: chenchangqin
- * Date: 18/6/19
- * Time: 下午12:17
- * Description: 爬虫类
- */
+
 namespace Qcrawler\crawler;
 use GuzzleHttp\Client;
+use Qcrawler\Core;
 use Symfony\Component\DomCrawler\Crawler;
 
+/**
+ * Class QCrawler 爬虫类
+ * @package Qcrawler\crawler
+ */
 class QCrawler implements QCrawlerInterface
 {
     /**
@@ -29,12 +28,6 @@ class QCrawler implements QCrawlerInterface
      * 是否开启断点爬取，不设置则每次都重新爬取
      */
     public $breakpoint = false;
-
-    /**
-     * @var int
-     * 并发线程数，默认为1
-     */
-    public $concurrency = 1;
 
     /**
      * @var int
@@ -67,70 +60,88 @@ class QCrawler implements QCrawlerInterface
     public $selector;
 
     private $crawler;
+    private $error;
 
     public function init()
     {
 
+        if ($this->breakpoint) {
+            return $this->breakPoint();
+        }
 
         $client = new Client(['timeout' => $this->timeout]);
-        $data = $client->requestAsync('get', $this->base_uri);
-        var_dump($data);die;
-//        $this->crawler = new Crawler();
+        $data = $client->get($this->base_uri);
+        $result = iconv('GBK', 'UTF-8', $data->getBody()->getContents());
+        $this->crawler = new Crawler();
+        $this->crawler->addHtmlContent($result);
+        $list = [];
+        $this->crawler->filter($this->selector)->each(function(Crawler $node, $i) use (&$list) {
+            $name = $this->domFilter($node,'a:nth-child(2)', 'html');
+            if (empty($name)) {
+                return;
+            }
 
-
+            $url = $this->base_uri.$this->domFilter($node,'a:nth-child(2)', 'attr', 'href');
+            $data = [
+                'name' => $name,
+                'url' => $url,
+                'time' => $this->domFilter($node,'.inddline font','html')
+            ];
+            $list[] = $data;
+        });
+        $this->data = $list;
         return $this;
     }
 
     public function run()
     {
-        $this->crawler = new Crawler();
-        $this->crawler->addHtmlContent();
-
-
-
-
-        $result = iconv('GBK', 'UTF-8', $result);
-        $crawler = new Crawler();
-        $crawler->addHtmlContent($result);
-
-        $list = [];
-        // 通过css选择器遍历影片列表
-        $tr_selector = '#header > div > div.bd2 > div.bd3 > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div.co_content8 tr';
-        $crawler->filter($tr_selector)->each(function (Crawler $node, $i) use (&$list) {
-            $name = dom_filter($node, 'a:nth-child(2)', 'html');
-            if (empty($name)) {
-                return;
-            }
-            $url = 'http://www.dytt8.net'.dom_filter($node, 'a:nth-child(2)', 'attr', 'href');
-
-            $data = [
-                'name' => $name,
-                'url' => $url,
-                'time' => dom_filter($node, '.inddline font', 'html'),
-            ];
-            // 把影片url、name推送到redis队列，以便进一步爬取影片下载链接
-            redis()->lpush('dytt8:detail_queue', json_encode($data));
-            $list[] = $data;
-        });
-        var_dump($list);
+        var_dump($this->data);
+        return true;
     }
 
     public function validate()
     {
-        if (!$this->base_uri) {
-            throw new \Exception('base_uri not found');
+
+        $validate = [
+            [['base_uri','name'],'require'],
+            [['base_uri','name'],'string']
+        ];
+
+        if (!empty($validate)) {
+            return Core::validation($this)->validate($validate);
         }
+
         return true;
     }
 
-    public function error()
+    /**
+     * @function domFilter
+     * @param Crawler $crawler
+     * @param $selector
+     * @param $method
+     * @param string $arguments
+     * @return null|string
+     * @author chenchangqin
+     * @description
+     */
+    public function domFilter(Crawler $crawler, $selector, $method, $arguments = '')
     {
-        // TODO: Implement error() method.
+        try {
+            return trim($crawler->filter($selector)->$method($arguments));
+        } catch (\Exception $e) {
+            return NULL;
+        }
     }
 
-    public function success()
+    /**
+     * @function breakPoint
+     * @return $this
+     * @author chenchangqin
+     * @description 断点续爬
+     */
+    public function breakPoint()
     {
-        // TODO: Implement success() method.
+        return $this;
     }
 
     public function __set($name, $value)
@@ -141,5 +152,24 @@ class QCrawler implements QCrawlerInterface
     public function __get($name)
     {
         return $this->$name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+
+    public function error()
+    {
+        // TODO: Implement error() method.
+    }
+
+    public function success()
+    {
+        // TODO: Implement success() method.
     }
 }
