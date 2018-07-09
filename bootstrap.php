@@ -12,4 +12,5 @@ define('APP',ROOT.'/app');
 define('CONFIG',ROOT.'/config');
 
 require ROOT . '/vendor/autoload.php';
-//注入配置文件
+//注入函数文件
+require CORE. '/functions/functions.php';
